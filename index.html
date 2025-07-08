@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Auftrag annehmen</title>
+  <title>Auftrag erfassen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
@@ -17,7 +17,7 @@
     h1 {
       color: #00ffd5;
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     .form-box {
@@ -29,8 +29,8 @@
 
     label {
       display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
+      margin-top: 12px;
+      margin-bottom: 4px;
       font-weight: bold;
     }
 
@@ -41,7 +41,7 @@
       border: none;
       background-color: #2c2c2c;
       color: #f1f1f1;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     textarea {
@@ -49,7 +49,7 @@
     }
 
     .submit-btn {
-      margin-top: 25px;
+      margin-top: 20px;
       width: 100%;
       padding: 14px;
       background-color: #00ffd5;
@@ -68,34 +68,64 @@
 </head>
 <body>
 
-  <h1>✅ Auftrag annehmen</h1>
+  <h1>📝 Auftrag eingeben</h1>
 
   <div class="form-box">
-    <label for="zahlung">💳 Zahlungsart</label>
-    <select id="zahlung">
-      <option>Bar</option>
-      <option>EC</option>
-      <option>Überweisung</option>
-      <option>Twint</option>
-      <option>Offen</option>
+    <label for="name">👤 Name</label>
+    <input type="text" id="name" placeholder="z.B. Maier">
+
+    <label for="telefon">📞 Telefonnummer</label>
+    <input type="text" id="telefon" placeholder="z.B. +436641234567">
+
+    <label for="straße">🏠 Straße</label>
+    <input type="text" id="straße" placeholder="z.B. Musterstraße 12">
+
+    <label for="plz">📮 PLZ</label>
+    <input type="text" id="plz" placeholder="z.B. 4600">
+
+    <label for="ort">📍 Ort</label>
+    <input type="text" id="ort" placeholder="z.B. Wels">
+
+    <label for="branche">🛠️ Branche</label>
+    <select id="branche">
+      <option>Schlüsseldienst</option>
+      <option>Rohrreinigung</option>
+      <option>Sanitär</option>
+      <option>Heizung</option>
+      <option>Elektro</option>
+      <option>Schädlingsbekämpfung</option>
+      <option>Spenglerei</option>
     </select>
 
-    <label for="kommentar">📝 Kommentar</label>
-    <textarea id="kommentar" rows="3" placeholder="z.B. Kunde zahlt bar, Polizei vor Ort..."></textarea>
+    <label for="termin">📅 Termin (optional)</label>
+    <input type="text" id="termin" placeholder="z.B. 30.07. 10:00 Uhr">
 
-    <button class="submit-btn" onclick="sendData()">✅ Auftrag senden</button>
+    <label for="info">📝 Zusatzinfo</label>
+    <textarea id="info" rows="3" placeholder="z.B. Polizei vor Ort, kein Schlüssel..."></textarea>
+
+    <button class="submit-btn" onclick="sendData()">✅ Auftrag absenden</button>
   </div>
 
   <script>
+    function generateAuftragsnummer() {
+      return 'AUF-' + Date.now() + '-' + Math.floor(Math.random() * 10000);
+    }
+
     function sendData() {
       const data = {
-        action: "auftrag_angenommen",
-        auftragsnummer: "12345678-ABCD", // später dynamisch ersetzen!
-        zahlung: document.getElementById('zahlung').value,
-        kommentar: document.getElementById('kommentar').value
+        action: "auftrag_neu",
+        auftragsnummer: generateAuftragsnummer(),
+        name: document.getElementById('name').value,
+        telefon: document.getElementById('telefon').value,
+        straße: document.getElementById('straße').value,
+        plz: document.getElementById('plz').value,
+        ort: document.getElementById('ort').value,
+        branche: document.getElementById('branche').value,
+        termin: document.getElementById('termin').value,
+        info: document.getElementById('info').value
       };
 
-      if (window.Telegram.WebApp) {
+      if (Telegram.WebApp) {
         Telegram.WebApp.sendData(JSON.stringify(data));
         Telegram.WebApp.close();
       } else {
@@ -103,7 +133,6 @@
       }
     }
 
-    // Optional: Telegram Theme setzen
     Telegram.WebApp.expand();
     Telegram.WebApp.ready();
   </script>
