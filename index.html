@@ -2,8 +2,9 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Auftragsannahme</title>
+  <title>Auftrag annehmen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body {
       background-color: #121212;
@@ -79,20 +80,17 @@
       <option>Offen</option>
     </select>
 
-    <label for="kommentar">📝 Kommentar / Bemerkung</label>
-    <textarea id="kommentar" rows="3" placeholder="z.B. Kunde zahlt in bar, Polizei vor Ort..."></textarea>
+    <label for="kommentar">📝 Kommentar</label>
+    <textarea id="kommentar" rows="3" placeholder="z.B. Kunde zahlt bar, Polizei vor Ort..."></textarea>
 
-    <label for="foto">📷 Foto (optional)</label>
-    <input type="file" id="foto" accept="image/*">
-
-    <button class="submit-btn" onclick="sendData()">✅ Senden</button>
+    <button class="submit-btn" onclick="sendData()">✅ Auftrag senden</button>
   </div>
 
   <script>
     function sendData() {
       const data = {
-        action: 'auftrag_angenommen',
-        auftragsnummer: '123456789', // wird später dynamisch ersetzt
+        action: "auftrag_angenommen",
+        auftragsnummer: "12345678-ABCD", // später dynamisch ersetzen!
         zahlung: document.getElementById('zahlung').value,
         kommentar: document.getElementById('kommentar').value
       };
@@ -101,9 +99,13 @@
         Telegram.WebApp.sendData(JSON.stringify(data));
         Telegram.WebApp.close();
       } else {
-        alert("Telegram WebApp nicht erkannt.");
+        alert("Nicht in Telegram geöffnet!");
       }
     }
+
+    // Optional: Telegram Theme setzen
+    Telegram.WebApp.expand();
+    Telegram.WebApp.ready();
   </script>
 
 </body>
